@@ -16,11 +16,27 @@ RETROPIE-SETUP(){
     sudo ./retropie_setup.sh
 }
 RETROPIE-CUSTOMIZED(){
-	echo "Creating custom es_systems.cfg in /opt/retropie/configs/all/emulationstation"
-	sudo cp /etc/emulationstation/es_systems.cfg /opt/retropie/configs/all/emulationstation/es_systems.cfg
-	echo "Creating custom-carbon theme"
-	sudo cp -R /etc/emulationstation/themes/carbon /opt/retropie/configs/all/emulationstation/themes/carbon-custom
-	echo "Customization is now done."
+	
+	echo "Checking for custom es_systems.cfg"
+	file=/opt/retropie/configs/all/emulationstation/es_systems.cfg
+	if [ -e "$file" ]; then
+	echo "Custom es_systems.cfg found in /opt/retropie/configs/all/emulationstation/ making backup in /opt/retropie/configs/all/emulationstation/es_systems.cfg /opt/retropie/configs/all/emulationstation/es_systems.old!"
+	sudo cp /opt/retropie/configs/all/emulationstation/es_systems.cfg /opt/retropie/configs/all/emulationstation/es_systems.old
+	else 
+    echo "Custom es_systems.cfg does not exist, creating"
+    sudo cp /etc/emulationstation/es_systems.cfg /opt/retropie/configs/all/emulationstation/es_systems.cfg
+    fi
+    
+    echo "Checking for custom theme"
+    file=/opt/retropie/configs/all/emulationstation/themes/carbon-custom
+    if [ -e "$file" ]; then
+    echo "Custom theme found in /opt/retropie/configs/all/emulationstation/themes/carbon-custom making backup in /opt/retropie/configs/all/emulationstation/themes/carbon-custom /opt/retropie/configs/all/emulationstation/themes/carbon-custom.old"
+    sudo cp -R /opt/retropie/configs/all/emulationstation/themes/carbon-custom /opt/retropie/configs/all/emulationstation/themes/carbn-custom.old
+    else
+    echo "Custom theme does not exist, creating"
+    sudo cp -R /etc/emulationstation/themes/carbon /opt/retropie/configs/all/emulationstation/themes/carbon-custom
+    fi
+    echo "Customization is now done."
 	echo "You can now add systems to /opt/retropie/configs/all/emulationstation/es_systems.cfg"
 	echo "And you can now modify the custom-carbon theme and select it in emulationstation to use it."
 }
@@ -145,31 +161,40 @@ INSTALL(){
 	"RETROPIE-BGM" "RetroPie Background Music" ON \
 	"RETROPIE-BIOS-FILES" "RetroPie BIOS files" ON \
 	"AFTER-BURNER" "raspbian after burner script" ON 3>&1 1>&2 2>&3)
-	if [ $option = BASH_ALIASES ]; then
+	if [[ $option = *"BASH_ALIASES"* ]];
+	then
 	BASH_ALIASES
 	fi
-	if [ $option = CREATE_AP ]; then
+		if [[ $option = *"CREATE_AP"* ]];
+	then
 	CREATE_AP
 	fi
-	if [ $option = RETROPIE-SETUP ]; then
+	if [[ $option = *"RETROPIE-SETUP"* ]];
+	then
 	RETROPIE-SETUP
 	fi
-	if [ $option = RETROPIE-CUSTOMIZED ]; then
+	if [[ $option = *"RETROPIE-CUSTOMIZED"* ]];
+	then
 	RETROPIE-CUSTOMIZED
 	fi
-	if [ $option = RETROPIE-ROM-USB ]; then
+	if [[ $option = *"RETROPIE-ROM-USB"* ]];
+	then
 	RETROPIE-ROM-USB
 	fi
-	if [ $option = RETROPIE-INTERNET-RADIO ]; then
+	if [[ $option = *"RETROPIE-INTERNET-RADIO"* ]];
+	then
 	RETROPIE-INTERNET-RADIO
 	fi
-	if [ $option = RETROPIE-BGM ]; then
+	if [[ $option = *"RETROPIE-BGM"* ]];
+	then
 	RETROPIE-BGM
 	fi
-	if [ $option = RETROPIE-BIOS-FILES ]; then
+	if [[ $option = *"RETROPIE-BIOS-FILES"* ]];
+	then
 	RETROPIE-BGM
 	fi
-	if [ $option = AFTER-BURNER ]; then
+	if [[ $option = *"AFTER-BURNER"* ]];
+	then
 	AFTER-BURNER
 	fi
 }
@@ -226,10 +251,10 @@ MENU(){
 	option=$(whiptail --title "Menu" --menu "Choose an option" 25 78 16 \
 	"INSTALL" "Install software." \
 	"REMBLOAT" "Remove bloatware." 3>&1 1>&2 2>&3)
-	if [ $option = INSTALL ]; then
+	if [[ $option = INSTALL ]]; then
 	INSTALL
 	fi
-	if [ $option = REMBLOAT ]; then
+	if [[ $option = REMBLOAT ]]; then
 	REMBLOAT
 	fi 
 
