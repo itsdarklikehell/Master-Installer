@@ -40,27 +40,38 @@ RETROPIE-CUSTOMIZED(){
 	echo "You can now add systems to /opt/retropie/configs/all/emulationstation/es_systems.cfg"
 	echo "And you can now modify the custom-carbon theme and select it in emulationstation to use it."
 }
-CREATE_AP(){
+
+PONYSAY(){
 cd $clonedir
-$CLONE/create_ap
-sudo apt-get install bash util-linux procps hostapd iproute2 iw haveged dnsmasq iptables
-cd create_ap
-sudo make install
-sudo nano /etc/create_ap.conf
-sudo nano /etc/network/interfaces
-sudo systemctl start create_ap
-sudo systemctl enable create_ap
+sudo apt-get install coreutils
+git clone https://github.com/erkin/ponysay
+cd ponysay
+sudo ./setup.py --freedom=partial install
+ponysay "Done installing ponysay!"
 }
+
+CREATE_AP(){
+	cd $clonedir
+	$CLONE/create_ap
+	sudo apt-get install bash util-linux procps hostapd iproute2 iw haveged dnsmasq iptables
+	cd create_ap
+	sudo make install
+	sudo nano /etc/create_ap.conf
+	sudo nano /etc/network/interfaces
+	sudo systemctl start create_ap
+	sudo systemctl enable create_ap
+}
+
 AFTER-BURNER(){
-cd $clonedir
-$CLONE/raspbian-after-burner
-echo "still needs configuring"
+	cd $clonedir
+	$CLONE/raspbian-after-burner
+	echo "still needs configuring"
 }
 
 RETROPIE-BIOS-FILES(){
-cd $clonedir
-$CLONE/RetroPie-Bios-Files
-echo "still needs configuring"
+	cd $clonedir
+	$CLONE/RetroPie-Bios-Files
+	echo "still needs configuring"
 }
 
 RETROPIE-BGM(){
@@ -152,15 +163,16 @@ source $HOME/.bash_aliases
 INSTALL(){
 	option=$(whiptail --title "Check list" --checklist \
 	"Choose what to install" 20 78 4 \
-	"BASH_ALIASES" "Bash aliases" ON \
-	"CREATE_AP" "Create AP" ON \
-	"RETROPIE-SETUP" "RetroPie setup Script" ON \
-	"RETROPIE-CUSTOMIZED" "Custom Retropie theme and menus" ON \
-	"RETROPIE-ROM-USB" "RetroPie Roms on USB" ON \
-	"RETROPIE-INTERNET-RADIO" "RetroPie Internet Radio" ON \
-	"RETROPIE-BGM" "RetroPie Background Music" ON \
-	"RETROPIE-BIOS-FILES" "RetroPie BIOS files" ON \
-	"AFTER-BURNER" "raspbian after burner script" ON 3>&1 1>&2 2>&3)
+	"BASH_ALIASES" "Bash aliases" OFF \
+	"PONYSAY" "Like cowsay but with ponies!" OFF \
+	"CREATE_AP" "Create AP" OFF \
+	"RETROPIE-SETUP" "RetroPie setup Script" OFF \
+	"RETROPIE-CUSTOMIZED" "Custom Retropie theme and menus" OFF \
+	"RETROPIE-ROM-USB" "RetroPie Roms on USB" OFF \
+	"RETROPIE-INTERNET-RADIO" "RetroPie Internet Radio" OFF \
+	"RETROPIE-BGM" "RetroPie Background Music" OFF \
+	"RETROPIE-BIOS-FILES" "RetroPie BIOS files" OFF \
+	"AFTER-BURNER" "raspbian after burner script" OFF 3>&1 1>&2 2>&3)
 	if [[ $option = *"BASH_ALIASES"* ]];
 	then
 	BASH_ALIASES
@@ -168,6 +180,10 @@ INSTALL(){
 		if [[ $option = *"CREATE_AP"* ]];
 	then
 	CREATE_AP
+	fi
+	if [[ $option = *"PONYSAY"* ]];
+	then
+	PONYSAY
 	fi
 	if [[ $option = *"RETROPIE-SETUP"* ]];
 	then
