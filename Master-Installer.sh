@@ -1,6 +1,7 @@
 #!/bin/bash
 CONFIG(){
-	whiptail --title "Master-Installer" --msgbox "Welcome to Master-Installer by rizzo." 8 78
+	eval `resize`
+	whiptail --title "Master-Installer" --msgbox "Welcome to Master-Installer by rizzo." $LINES $COLUMNS
 	#sudo apt-get update && sudo apt-get upgrade -y
 	clonedir=$HOME
 	masterurl="https://github.com/itsdarklikehell"
@@ -19,14 +20,14 @@ RETROPIE-CUSTOMIZED(){
 	
 	echo "Checking for custom es_systems.cfg"
 	file=/opt/retropie/configs/all/emulationstation/es_systems.cfg
-	if [ -e "$file" ]; then
-	echo "Custom es_systems.cfg found in /opt/retropie/configs/all/emulationstation/ making backup in /opt/retropie/configs/all/emulationstation/es_systems.cfg /opt/retropie/configs/all/emulationstation/es_systems.old!"
-	sudo cp /opt/retropie/configs/all/emulationstation/es_systems.cfg /opt/retropie/configs/all/emulationstation/es_systems.old
+	if [ -e "$file" ]; 
+	then
+		echo "Custom es_systems.cfg found in /opt/retropie/configs/all/emulationstation/ making backup in /opt/retropie/configs/all/emulationstation/es_systems.cfg /opt/retropie/configs/all/emulationstation/es_systems.old!"
+		sudo cp /opt/retropie/configs/all/emulationstation/es_systems.cfg /opt/retropie/configs/all/emulationstation/es_systems.old
 	else 
-    echo "Custom es_systems.cfg does not exist, creating"
-    sudo cp /etc/emulationstation/es_systems.cfg /opt/retropie/configs/all/emulationstation/es_systems.cfg
-    fi
-    
+    		echo "Custom es_systems.cfg does not exist, creating"
+    		sudo cp /etc/emulationstation/es_systems.cfg /opt/retropie/configs/all/emulationstation/es_systems.cfg
+    	fi
     echo "Checking for custom theme"
     file=/opt/retropie/configs/all/emulationstation/themes/carbon-custom
     if [ -e "$file" ]; then
@@ -42,12 +43,12 @@ RETROPIE-CUSTOMIZED(){
 }
 
 PONYSAY(){
-cd $clonedir
-sudo apt-get install coreutils
-git clone https://github.com/erkin/ponysay
-cd ponysay
-sudo ./setup.py --freedom=partial install
-ponysay "Done installing ponysay!"
+	cd $clonedir
+	sudo apt-get install coreutils
+	git clone https://github.com/erkin/ponysay
+	cd ponysay
+	sudo ./setup.py --freedom=partial install
+	ponysay "Done installing ponysay!"
 }
 
 CREATE_AP(){
@@ -161,8 +162,12 @@ source $HOME/.bash_aliases
 }
 
 INSTALL(){
+	# whiptail ... 20 78 4 ...
+	eval `resize`
+	#resize
+	#whiptail ... $LINES $COLUMNS $(( $LINES - 8 )) ...
 	option=$(whiptail --title "Check list" --checklist \
-	"Choose what to install" 20 78 4 \
+	"Choose what to install" $LINES $COLUMNS $(( $LINES - 8 )) \
 	"BASH_ALIASES" "Bash aliases" OFF \
 	"PONYSAY" "Like cowsay but with ponies!" OFF \
 	"CREATE_AP" "Create AP" OFF \
@@ -177,7 +182,7 @@ INSTALL(){
 	then
 	BASH_ALIASES
 	fi
-		if [[ $option = *"CREATE_AP"* ]];
+	if [[ $option = *"CREATE_AP"* ]];
 	then
 	CREATE_AP
 	fi
@@ -264,7 +269,7 @@ REMBLOAT(){
 	sudo apt-get update && sudo apt-get upgrade -y
 }
 MENU(){
-	option=$(whiptail --title "Menu" --menu "Choose an option" 25 78 16 \
+	option=$(whiptail --title "Menu" --menu "Choose an option" $LINES $COLUMNS $(( $LINES - 8 )) \
 	"INSTALL" "Install software." \
 	"REMBLOAT" "Remove bloatware." 3>&1 1>&2 2>&3)
 	if [[ $option = INSTALL ]]; then
@@ -276,7 +281,7 @@ MENU(){
 
 }
 CONFIG
-if (whiptail --title "Warning!" --yesno "Warning use this scrip with caution, press no to cancel now." 8 78) then
+if (whiptail --title "Warning!" --yesno "Warning use this scrip with caution, press no to cancel now." $LINES $COLUMNS) then
     echo "User selected Yes, exit status was $?."
     MENU
 else
