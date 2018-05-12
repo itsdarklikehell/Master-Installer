@@ -1,9 +1,9 @@
 #!/bin/bash
 CONFIG(){
 	sudo apt-get install whiptail
-    eval `resize`
-	whiptail --title "Master-Installer" --msgbox "Welcome to Master-Installer by rizzo." $LINES $COLUMNS
-	#sudo apt-get update && sudo apt-get upgrade -y
+#    eval `resize`
+#	whiptail --title "Master-Installer" --msgbox "Welcome to Master-Installer by rizzo." $LINES $COLUMNS
+	sudo apt-get update && sudo apt-get upgrade -y
 	clonedir=$HOME
 	masterurl="https://github.com/itsdarklikehell"
 	CLONE="git clone $masterurl"
@@ -164,11 +164,11 @@ source $HOME/.bash_aliases
 
 INSTALL(){
 	# whiptail ... 20 78 4 ...
-	eval `resize`
+	#eval `resize`
 	#resize
 	#whiptail ... $LINES $COLUMNS $(( $LINES - 8 )) ...
 	option=$(whiptail --title "Check list" --checklist \
-	"Choose what to install" $LINES $COLUMNS $(( $LINES - 8 )) \
+	"Choose what to install" 20 78 4 \
 	"BASH_ALIASES" "Bash aliases" OFF \
 	"PONYSAY" "Like cowsay but with ponies!" OFF \
 	"CREATE_AP" "Create AP" OFF \
@@ -270,7 +270,7 @@ REMBLOAT(){
 	sudo apt-get update && sudo apt-get upgrade -y
 }
 MENU(){
-	option=$(whiptail --title "Menu" --menu "Choose an option" $LINES $COLUMNS $(( $LINES - 8 )) \
+	option=$(whiptail --title "Menu" --menu "Choose an option" 20 78 4 \
 	"INSTALL" "Install software." \
 	"REMBLOAT" "Remove bloatware." 3>&1 1>&2 2>&3)
 	if [[ $option = INSTALL ]]; then
@@ -282,7 +282,7 @@ MENU(){
 
 }
 CONFIG
-if (whiptail --title "Warning!" --yesno "Warning use this scrip with caution, press no to cancel now." $LINES $COLUMNS) then
+if (whiptail --title "Warning!" --yesno "Warning use this scrip with caution, press no to cancel now." 20 78) then
     echo "User selected Yes, exit status was $?."
     MENU
 else
