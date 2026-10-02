@@ -1,12 +1,12 @@
 #!/bin/bash
+set -euo pipefail
+
 CONFIG(){
-	sudo apt-get install whiptail
-#    eval `resize`
-#	whiptail --title "Master-Installer" --msgbox "Welcome to Master-Installer by rizzo." $LINES $COLUMNS
-	sudo apt-get update && sudo apt-get upgrade -y
-	clonedir=$HOME
-	masterurl="https://github.com/itsdarklikehell"
-	CLONE="git clone $masterurl"
+    sudo apt-get update
+    sudo apt-get install -y whiptail
+    sudo apt-get upgrade -y
+    clonedir="$HOME"
+    masterurl="https://github.com/itsdarklikehell"
 }
 
 RETROPIE-SETUP(){
