@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 CONFIG(){
 	sudo apt-get install whiptail
 #    eval `resize`
